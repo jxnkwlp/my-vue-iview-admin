@@ -7,12 +7,12 @@
           {{getTitle(menu)}}
         </template>
         <template v-for="item in menu.children">
-          <MenuItem :key="`menu-${item.name}`" :name="item.name">{{getTitle(item)}}</MenuItem>
+          <MenuItem :key="`menu-${item.name}`" :name="getName(item)">{{getTitle(item)}}</MenuItem>
         </template>
       </Submenu>
     </template>
     <template v-else>
-      <MenuItem :key="`menu-${menu.name}`" :name="menu.name">
+      <MenuItem :key="`menu-${menu.name}`" :name="getName(menu)">
         <Icon :type="getIcon(menu)"/>
         {{getTitle(menu)}}
       </MenuItem>
@@ -41,6 +41,13 @@ export default {
       }
       if (menu.children && menu.children.length === 1) {
         return this.getTitle(menu.children[0]);
+      }
+      return title;
+    },
+    getName(menu) {
+      var title = menu.name;
+      if (menu.children && menu.children.length === 1) {
+        return this.getName(menu.children[0]);
       }
       return title;
     },

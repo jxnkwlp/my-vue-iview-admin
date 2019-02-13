@@ -5,10 +5,16 @@
 </template>
 
 <style lang="less">
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+html,
+body {
+  width: 100%;
+  height: 100%;
+  font-family: "microsoft-yahei", Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #333;
+}
+#app {
+  height: 100%;
 }
 </style>

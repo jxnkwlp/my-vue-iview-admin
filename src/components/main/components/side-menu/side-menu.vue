@@ -1,6 +1,14 @@
 <template>
   <div class="menu-list-container">
-    <Menu theme="dark" :accordion="true" width="auto" :open-names="opendMenuNames" @on-select="HandleMenuSelect">
+    <Menu
+      ref="menu"
+      theme="dark"
+      :accordion="true"
+      width="auto"
+      :active-name="activeName"
+      :open-names="opendMenuNames"
+      @on-select="HandleMenuSelect"
+    >
       <template v-for="item in menuList">
         <side-menu-item :key="`menu-${item.name}`" :menu="item"></side-menu-item>
       </template>
@@ -20,8 +28,22 @@ export default {
       default() {
         return [];
       }
+    },
+    activeName: {
+      type: String,
+      default() {
+        return "";
+      }
+    },
+    openMenus: {
+      type: Array,
+      default() {
+        return [];
+      }
     }
   },
+  mounted() {},
+  created() {},
   data() {
     return {
       opendMenuNames: []
@@ -29,7 +51,25 @@ export default {
   },
   methods: {
     HandleMenuSelect(name) {
-        this.$emit('on-select', name)
+      this.$emit("on-select", name);
+    },
+
+    getOpenedNamesByActiveName(name) {
+      return this.$route.matched
+        .map(item => item.name)
+        .filter(item => item !== name);
+    },
+
+    updateOpenName(name) {
+      this.opendMenuNames = this.getOpenedNamesByActiveName(name);
+    }
+  },
+  watch: {
+    activeName(name) {},
+    opendMenuNames(names) {
+      this.$nextTick(() => {
+        this.$refs.menu.updateOpened();
+      });
     }
   }
 };

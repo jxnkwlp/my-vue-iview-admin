@@ -1,11 +1,13 @@
 <template>
   <Dropdown @on-click="handleMenuClick">
+    <Avatar icon="ios-person" size="small"/>
     <span>
       {{userName}}
       <Icon type="ios-arrow-down"></Icon>
     </span>
     <DropdownMenu slot="list">
       <DropdownItem name="changepassword">修改密码</DropdownItem>
+      <DropdownItem name="message">消息中心</DropdownItem>
       <DropdownItem divided name="logout">退出</DropdownItem>
     </DropdownMenu>
   </Dropdown>
@@ -13,30 +15,27 @@
 
 <script>
 export default {
-  created() {
-    this.loadUserInfo();
-  },
+  created() {},
   data() {
-    return {
-      userName: ""
-    };
+    return {};
+  },
+  computed: {
+    userName() {
+      return this.$store.state.user.userName;
+    }
   },
   methods: {
-    loadUserInfo() {
-        // TODO 
-      this.userName = "aaa";
-    },
     handleMenuClick(name) {
       switch (name) {
         case "changepassword":
           //TODO
-          this.$Message.info("待实现");
           break;
         case "logout":
           //TODO
-          this.$Message.info("待实现");
           break;
       }
+
+      this.$Message.info("待实现");
     }
   }
 };

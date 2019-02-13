@@ -7,17 +7,28 @@
     <Sider :width="256" :style="{overflow: 'hidden'}" class="left-sider">
       <Header class="left-sider-header">XXXX</Header>
 
-      <side-menu :menuList="menuList" @on-select="handleMenuRoute"></side-menu>
+      <side-menu
+        ref="sideMenu"
+        :menuList="menuList"
+        :active-name="$route.name"
+        :open-menus="menuOpenList"
+        @on-select="handleMenuRoute"
+      ></side-menu>
     </Sider>
     <!-- 左侧 -->
     <Layout>
       <!-- 头部 -->
-      <Header class="top-header" :style="{background: '#fff', boxShadow: '0 2px 3px 2px rgba(0,0,0,.1)'}">
-         <user class="top-header-user"></user>
+      <Header
+        class="top-header"
+        :style="{background: '#fff', boxShadow: '0 2px 3px 2px rgba(0,0,0,.1)'}"
+      >
+        <user class="top-header-user"></user>
       </Header>
       <Content :style="{padding: '16px 16px'}">
         <!-- 内容区 -->
-        <router-view/>
+        <keep-alive>
+          <router-view/>
+        </keep-alive>
       </Content>
     </Layout>
   </Layout>
@@ -44,10 +55,15 @@ export default {
     },
     menuList: function() {
       return getMenuList([]);
+    },
+    menuOpenList: function() {
+      return this.$route.matched
+        .map(item => item.name)
+        .filter(item => item !== this.$route.name);
     }
   },
   methods: {
-    handleMenuRoute(route) { 
+    handleMenuRoute(route) {
       let { name, params, query } = {};
       if (typeof route === "string") name = route;
       else {
@@ -65,6 +81,17 @@ export default {
         query
       });
     }
+  },
+  watch: {
+    // 页面地址改变
+    $route(newRoute) {
+      const { name, query, params, meta } = newRoute;
+      this.$refs.sideMenu.updateOpenName(newRoute.name);
+    }
+  },
+  mounted() {
+    // 首次打开
+    this.$refs.sideMenu.updateOpenName(this.$route);
   }
 };
 </script>
